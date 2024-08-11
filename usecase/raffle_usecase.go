@@ -18,3 +18,7 @@ func NewRaffleUsecase(repository repository.RaffleRepository) RaffleUsecase {
 func (u *RaffleUsecase) GetRaffleList() ([]model.Raffle, error) {
 	return u.raffleRepository.GetRaffleList()
 }
+
+func (u *RaffleUsecase) GetRaffleById(raffleId int) (*model.Raffle, error) {
+	return u.raffleRepository.GetRaffleById(raffleId)
+}

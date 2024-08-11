@@ -17,6 +17,7 @@ func NewRaffleRouter(connection *sql.DB) *http.ServeMux {
 	raffleRouter := http.NewServeMux()
 
 	raffleRouter.HandleFunc("GET /", controller.GetRaffleList)
+	raffleRouter.HandleFunc("GET /{raffleId}", controller.GetRaffleById)
 
 	return raffleRouter
 }

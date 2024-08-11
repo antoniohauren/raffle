@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strconv"
 )
 
 type Response struct {
@@ -26,4 +27,30 @@ func WriteJson(w http.ResponseWriter, status int, body any) {
 	w.WriteHeader(status)
 
 	fmt.Fprint(w, string(jsonData))
+}
+
+func GetParam(r *http.Request, key string) (*string, error) {
+	param := r.PathValue(key)
+
+	if len(param) == 0 {
+		return nil, fmt.Errorf("param [%s] is required", key)
+	}
+
+	return &param, nil
+}
+
+func GetIntParam(r *http.Request, key string) (*int, error) {
+	param, err := GetParam(r, key)
+
+	if err != nil {
+		return nil, err
+	}
+
+	number, err := strconv.Atoi(*param)
+
+	if err != nil {
+		return nil, fmt.Errorf("param [%s] should be a number", key)
+	}
+
+	return &number, nil
 }

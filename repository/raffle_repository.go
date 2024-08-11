@@ -50,3 +50,34 @@ func (r *RaffleRepository) GetRaffleList() ([]model.Raffle, error) {
 
 	return raffleList, nil
 }
+
+func (r *RaffleRepository) GetRaffleById(raffleId int) (*model.Raffle, error) {
+	var raffle model.Raffle
+
+	query, err := r.connection.Prepare("SELECT id, name, description, prize FROM raffle WHERE id = $1")
+
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
+
+	err = query.QueryRow(raffleId).Scan(
+		&raffle.Id,
+		&raffle.Name,
+		&raffle.Description,
+		&raffle.Prize,
+	)
+
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, nil
+		}
+
+		fmt.Println(err)
+		return nil, err
+	}
+
+	query.Close()
+
+	return &raffle, nil
+}
