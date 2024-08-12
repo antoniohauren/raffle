@@ -22,3 +22,7 @@ func (u *RaffleUsecase) GetRaffleList() ([]model.Raffle, error) {
 func (u *RaffleUsecase) GetRaffleById(raffleId int) (*model.Raffle, error) {
 	return u.raffleRepository.GetRaffleById(raffleId)
 }
+
+func (u *RaffleUsecase) CreateRaffle(raffle model.RaffleRequest) (*int, error) {
+	return u.raffleRepository.CreateRaffle(raffle)
+}

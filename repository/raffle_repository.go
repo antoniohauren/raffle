@@ -81,3 +81,25 @@ func (r *RaffleRepository) GetRaffleById(raffleId int) (*model.Raffle, error) {
 
 	return &raffle, nil
 }
+
+func (r *RaffleRepository) CreateRaffle(raffle model.RaffleRequest) (*int, error) {
+	var id int
+
+	query, err := r.connection.Prepare("INSERT INTO raffle (name, description, prize) VALUES ($1, $2, $3) RETURNING id")
+
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
+
+	err = query.QueryRow(raffle.Name, raffle.Description, raffle.Prize).Scan(&id)
+
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
+
+	query.Close()
+
+	return &id, nil
+}

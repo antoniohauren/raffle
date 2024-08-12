@@ -10,3 +10,9 @@ type Raffle struct {
 	CreatedAt   time.Time `json:"created_at"`
 	UpdatedAt   time.Time `json:"updated_at"`
 }
+
+type RaffleRequest struct {
+	Name        string  `json:"name"`
+	Description string  `json:"description"`
+	Prize       float32 `json:"prize"`
+}

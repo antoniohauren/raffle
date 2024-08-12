@@ -1,8 +1,10 @@
 package controller
 
 import (
+	"encoding/json"
 	"net/http"
 
+	"github.com/antoniohauren/raffle/model"
 	"github.com/antoniohauren/raffle/usecase"
 )
 
@@ -48,4 +50,23 @@ func (c *RaffleController) GetRaffleById(w http.ResponseWriter, r *http.Request)
 	}
 
 	WriteJson(w, http.StatusOK, data)
+}
+
+func (c *RaffleController) CreateRaffle(w http.ResponseWriter, r *http.Request) {
+	var raffle model.RaffleRequest
+
+	err := json.NewDecoder(r.Body).Decode(&raffle)
+
+	if err != nil {
+		WriteJson(w, http.StatusBadRequest, "Invalid body")
+		return
+	}
+
+	id, err := c.raffleUsecase.CreateRaffle(raffle)
+
+	if err != nil {
+		WriteJson(w, http.StatusInternalServerError, "")
+	}
+
+	WriteJson(w, http.StatusCreated, id)
 }
